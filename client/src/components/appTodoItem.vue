@@ -12,7 +12,7 @@
     </div>
 
     <button
-      class="border-2 px-5 rounded-lg transition duration-300 border-rose-700 text-rose-700 hover:bg-rose-700 hover:text-white '">
+      class="border-2 px-5 rounded-lg transition duration-300 border-rose-700 text-rose-700 hover:bg-rose-700 hover:text-white ' hover:cursor-pointer">
       Done
     </button>
   </div>

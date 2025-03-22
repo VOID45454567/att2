@@ -4,7 +4,10 @@
       <app-button v-for="category in categories" :key="category" :text="category"
         :isActive="currentCategory === category" @click="setCurrentCategory(category)" />
     </div>
-    <app-todo-list :todos="filteredTodos" />
+    <!-- Контейнер для списка дел с анимацией -->
+    <div ref="todoListRef" class="flex flex-col">
+      <app-todo-item v-for="(item, index) in filteredTodos" :key="item.text" :text="item.text" :isDone="item.isDone" />
+    </div>
   </div>
   <div>
     <app-add-todo />
@@ -12,18 +15,35 @@
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import autoAnimate from "@formkit/auto-animate";
 import AppButton from "./appButton.vue";
-import AppTodoList from "./appTodoList.vue";
+import AppTodoItem from "./appTodoItem.vue";
 import AppAddTodo from "./appAddTodo.vue";
+
 export default {
   components: {
     AppButton,
-    AppTodoList,
+    AppTodoItem,
     AppAddTodo,
+  },
+  setup() {
+    const todoListRef = ref(null); // Ссылка на контейнер списка дел
+
+    // Инициализация AutoAnimate после монтирования компонента
+    onMounted(() => {
+      if (todoListRef.value) {
+        autoAnimate(todoListRef.value); // Применяем AutoAnimate к контейнеру
+      }
+    });
+
+    return {
+      todoListRef,
+    };
   },
   data() {
     return {
-      currentCategory: null,
+      currentCategory: "All",
       categories: ["All", "Active", "Done"],
       todos: [
         { text: "aBcDeFgHiJ", isDone: true },
