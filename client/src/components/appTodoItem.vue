@@ -11,14 +11,16 @@
       </p>
     </div>
 
-    <button
-      class="border-2 px-5 rounded-lg transition duration-300 border-rose-700 text-rose-700 hover:bg-rose-700 hover:text-white ' hover:cursor-pointer">
+    <button v-if="!isDone"
+      class="border-2 px-5 rounded-lg transition duration-300 border-rose-700 text-rose-700 hover:bg-rose-700 hover:text-white ' hover:cursor-pointer"
+      @click="toggleCategory">
       Done
     </button>
   </div>
 </template>
 <script>
 export default {
+  emits: ["toggleCategory"],
   props: {
     text: {
       type: String,
@@ -28,7 +30,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    id: {
+      type: Number,
+    }
+  },
+  methods: {
+    toggleCategory() {
+      this.$emit("toggleCategory", { id: this.id, isDone: !this.isDone });
+    }
   },
 };
 </script>
-<style></style>

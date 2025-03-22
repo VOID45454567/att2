@@ -4,9 +4,9 @@
       <app-button v-for="category in categories" :key="category" :text="category"
         :isActive="currentCategory === category" @click="setCurrentCategory(category)" />
     </div>
-    <!-- Контейнер для списка дел с анимацией -->
     <div ref="todoListRef" class="flex flex-col">
-      <app-todo-item v-for="(item, index) in filteredTodos" :key="item.text" :text="item.text" :isDone="item.isDone" />
+      <app-todo-item v-for="item in filteredTodos" :key="item.id" :text="item.text" :isDone="item.isDone" :id="item.id"
+        @toggle-category="handleToggleCategory" />
     </div>
   </div>
   <div>
@@ -28,12 +28,11 @@ export default {
     AppAddTodo,
   },
   setup() {
-    const todoListRef = ref(null); // Ссылка на контейнер списка дел
+    const todoListRef = ref(null);
 
-    // Инициализация AutoAnimate после монтирования компонента
     onMounted(() => {
       if (todoListRef.value) {
-        autoAnimate(todoListRef.value); // Применяем AutoAnimate к контейнеру
+        autoAnimate(todoListRef.value);
       }
     });
 
@@ -46,16 +45,16 @@ export default {
       currentCategory: "All",
       categories: ["All", "Active", "Done"],
       todos: [
-        { text: "aBcDeFgHiJ", isDone: true },
-        { text: "kLmNoPqRsT", isDone: false },
-        { text: "uVwXyZaBcD", isDone: true },
-        { text: "eFgHiJkLmN", isDone: false },
-        { text: "oPqRsTuVwX", isDone: true },
-        { text: "yZaBcDeFgH", isDone: false },
-        { text: "iJkLmNoPqR", isDone: true },
-        { text: "sTuVwXyZaB", isDone: false },
-        { text: "cDeFgHiJkL", isDone: true },
-        { text: "mNoPqRsTuV", isDone: false },
+        { id: 1, text: "aBcDeFgHiJ", isDone: true },
+        { id: 2, text: "kLmNoPqRsT", isDone: false },
+        { id: 3, text: "uVwXyZaBcD", isDone: true },
+        { id: 4, text: "eFgHiJkLmN", isDone: false },
+        { id: 5, text: "oPqRsTuVwX", isDone: true },
+        { id: 6, text: "yZaBcDeFgH", isDone: false },
+        { id: 7, text: "iJkLmNoPqR", isDone: true },
+        { id: 8, text: "sTuVwXyZaB", isDone: false },
+        { id: 9, text: "cDeFgHiJkL", isDone: true },
+        { id: 10, text: "mNoPqRsTuV", isDone: false },
       ],
     };
   },
@@ -63,6 +62,12 @@ export default {
     setCurrentCategory(category) {
       this.currentCategory = category;
     },
+    handleToggleCategory(data) {
+      const task = this.todos.find(task => task.id === data.id);
+      if (task) {
+        task.isDone = data.isDone;
+      }
+    }
   },
   computed: {
     filteredTodos() {
