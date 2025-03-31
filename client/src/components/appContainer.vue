@@ -4,7 +4,10 @@
       <app-button v-for="category in categories" :key="category" :text="category"
         :isActive="currentCategory === category" @click="setCurrentCategory(category)" />
     </div>
-    <div ref="todoListRef" class="flex flex-col">
+    <div v-if="!filteredTodos.length">
+      <p class="text-center text-lg text-gray-500">No todos in this category</p>
+    </div>
+    <div v-else ref="todoListRef" class="flex flex-col">
       <app-todo-item v-for="item in filteredTodos" :key="item.id" :text="item.text" :isDone="item.isDone" :id="item.id"
         @toggle-category="handleToggleCategory" />
     </div>
@@ -45,16 +48,16 @@ export default {
       currentCategory: "All",
       categories: ["All", "Active", "Done"],
       todos: [
-        { id: 1, text: "aBcDeFgHiJ", isDone: true },
-        { id: 2, text: "kLmNoPqRsT", isDone: false },
-        { id: 3, text: "uVwXyZaBcD", isDone: true },
-        { id: 4, text: "eFgHiJkLmN", isDone: false },
-        { id: 5, text: "oPqRsTuVwX", isDone: true },
-        { id: 6, text: "yZaBcDeFgH", isDone: false },
-        { id: 7, text: "iJkLmNoPqR", isDone: true },
-        { id: 8, text: "sTuVwXyZaB", isDone: false },
-        { id: 9, text: "cDeFgHiJkL", isDone: true },
-        { id: 10, text: "mNoPqRsTuV", isDone: false },
+        // { id: 1, text: "aBcDeFgHiJ", isDone: true },
+        // { id: 2, text: "kLmNoPqRsT", isDone: false },
+        // { id: 3, text: "uVwXyZaBcD", isDone: true },
+        // { id: 4, text: "eFgHiJkLmN", isDone: false },
+        // { id: 5, text: "oPqRsTuVwX", isDone: true },
+        // { id: 6, text: "yZaBcDeFgH", isDone: false },
+        // { id: 7, text: "iJkLmNoPqR", isDone: true },
+        // { id: 8, text: "sTuVwXyZaB", isDone: false },
+        // { id: 9, text: "cDeFgHiJkL", isDone: true },
+        // { id: 10, text: "mNoPqRsTuV", isDone: false },
       ],
     };
   },
@@ -63,9 +66,16 @@ export default {
       this.currentCategory = category;
     },
     handleToggleCategory(data) {
-      const task = this.todos.find(task => task.id === data.id);
-      if (task) {
-        task.isDone = data.isDone;
+      // Если категория "All", удаляем задачу
+      if (this.currentCategory === "All") {
+        this.todos = this.todos.filter(task => task.id !== data.id);
+      }
+      // Иначе просто меняем статус
+      else {
+        const task = this.todos.find(task => task.id === data.id);
+        if (task) {
+          task.isDone = data.isDone;
+        }
       }
     }
   },
